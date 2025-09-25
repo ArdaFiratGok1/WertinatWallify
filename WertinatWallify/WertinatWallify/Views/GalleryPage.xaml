@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:WertinatWallify.ViewModels"
+             xmlns:models="clr-namespace:WertinatWallify.Models"
+             x:DataType="viewmodels:GalleryViewModel"
+             x:Class="WertinatWallify.Views.GalleryPage"
+             Title="WertinatWallify Galeri">
+
+    <Grid>
+        <CollectionView ItemsSource="{Binding Wallpapers}"
+                        SelectionMode="Single">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Wallpaper">
+                    <Grid Padding="5">
+                        <Image Source="{Binding ThumbnailUrl}" Aspect="AspectFill" HeightRequest="250"/>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GalleryViewModel}}, Path=GoToDetailsCommand}"
+                                                  CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:WertinatWallify.ViewModels"
+             x:DataType="viewmodels:DetailViewModel"
+             x:Class="WertinatWallify.Views.DetailPage"
+             Title="Detay">
+
+    <Grid RowDefinitions="*, Auto">
+        <Image Grid.Row="0" 
+               Source="{Binding SelectedWallpaper.FullImageUrl}" 
+               Aspect="AspectFill" />
+
+        <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
+            <Button Text="Ana Ekran Yap" Command="{Binding SetAsHomeScreenCommand}"/>
+            <Button Text="Kilit Ekranı Yap" Command="{Binding SetAsLockScreenCommand}"/>
+            <Button Text="İkisini de Yap" Command="{Binding SetAsBothCommand}"/>
+            <Button Text="Paylaş" Command="{Binding ShareCommand}"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
