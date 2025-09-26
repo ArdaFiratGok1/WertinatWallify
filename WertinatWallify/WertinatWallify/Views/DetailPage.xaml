@@ -4,18 +4,46 @@
              xmlns:viewmodels="clr-namespace:WertinatWallify.ViewModels"
              x:DataType="viewmodels:DetailViewModel"
              x:Class="WertinatWallify.Views.DetailPage"
-             Title="Detay">
+             Shell.NavBarIsVisible="False">
+    <Grid>
+        <Image Source="{Binding SelectedWallpaper.FullImageUrl}" Aspect="AspectFill" />
 
-    <Grid RowDefinitions="*, Auto">
-        <Image Grid.Row="0" 
-               Source="{Binding SelectedWallpaper.FullImageUrl}" 
-               Aspect="AspectFill" />
+        <ImageButton Source="back_arrow.png" HeightRequest="40"
+                     WidthRequest="40"
+                     Margin="15,30"
+                     BackgroundColor="#80000000"
+                     CornerRadius="20"
+                     VerticalOptions="Start"
+                     HorizontalOptions="Start"
+                     Clicked="BackButton_Clicked"/>
+        <Border VerticalOptions="End"
+                Margin="10,0,10,20"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0"
+                Padding="20">
+            <Border.Background>
+                <SolidColorBrush Color="#AAFFFFFF"/>
+            </Border.Background>
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,0" Radius="30" Opacity="0.5"/>
+            </Border.Shadow>
 
-        <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
-            <Button Text="Ana Ekran Yap" Command="{Binding SetAsHomeScreenCommand}"/>
-            <Button Text="Kilit Ekranı Yap" Command="{Binding SetAsLockScreenCommand}"/>
-            <Button Text="İkisini de Yap" Command="{Binding SetAsBothCommand}"/>
-            <Button Text="Paylaş" Command="{Binding ShareCommand}"/>
-        </VerticalStackLayout>
+            <VerticalStackLayout Spacing="15">
+                <Label Text="{Binding SelectedWallpaper.Name}"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#1c1c1c"
+                       HorizontalOptions="Center"/>
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto, Auto" ColumnSpacing="10" RowSpacing="10">
+                    <Button Grid.Row="0" Grid.Column="0" Text="🏠 Ana Ekran" Command="{Binding SetAsHomeScreenCommand}" Style="{StaticResource ActionButtonStyle}"/>
+                    <Button Grid.Row="0" Grid.Column="1" Text="🔒 Kilit Ekranı" Command="{Binding SetAsLockScreenCommand}" Style="{StaticResource ActionButtonStyle}"/>
+                    <Button Grid.Row="1" Grid.Column="0" Text="⬇️ İndir" Command="{Binding DownloadImageCommand}" Style="{StaticResource ActionButtonStyle}"/>
+                    <Button Grid.Row="1" Grid.Column="1" Text="📤 Paylaş" Command="{Binding ShareCommand}" Style="{StaticResource ActionButtonStyle}"/>
+                </Grid>
+
+                <Button Grid.Row="2" Grid.ColumnSpan="2" Text="📱 İkisini de Yap" Command="{Binding SetAsBothCommand}" BackgroundColor="#5E35B1" TextColor="White" FontAttributes="Bold" CornerRadius="25" HeightRequest="50"/>
+            </VerticalStackLayout>
+        </Border>
     </Grid>
 </ContentPage>

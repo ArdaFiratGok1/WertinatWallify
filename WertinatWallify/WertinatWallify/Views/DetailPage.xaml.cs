@@ -8,5 +8,10 @@ public partial class DetailPage : ContentPage
     {
         InitializeComponent();
         BindingContext = viewModel;
+        this.SetBinding(TitleProperty, new Binding("SelectedWallpaper.Name"));
+    }
+    private async void BackButton_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
     }
 }

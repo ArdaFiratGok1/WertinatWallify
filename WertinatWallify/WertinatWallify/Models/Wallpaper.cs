@@ -11,5 +11,6 @@ namespace WertinatWallify.Models
         public int Id { get; set; }
         public string ThumbnailUrl { get; set; } // Grid'de gösterilecek küçük resim
         public string FullImageUrl { get; set; } // Detay sayfasındaki büyük resim
+        public string Name { get; set; } = string.Empty;
     }
 }

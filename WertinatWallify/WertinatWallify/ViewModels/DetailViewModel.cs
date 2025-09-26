@@ -4,30 +4,29 @@ using WertinatWallify.Models;
 using WertinatWallify.Services;
 using WertinatWallify.Services.WertinatWallify.Services;
 
-namespace WertinatWallify.ViewModels
+namespace WertinatWallify.ViewModels // Namespace'in doğru olduğundan emin olun
 {
-    // Navigasyon ile gelen veriyi almak için bu attribute'ü kullanıyoruz.
     [QueryProperty(nameof(SelectedWallpaper), "SelectedWallpaper")]
     public partial class DetailViewModel : ObservableObject
     {
         private readonly IImageService _imageService;
         private readonly IWallpaperService _wallpaperService;
+        private readonly IPhotoSaverService _photoSaverService;
 
         [ObservableProperty]
-        private Wallpaper selectedWallpaper;
+        private Wallpaper? selectedWallpaper;
 
-        public DetailViewModel(IImageService imageService, IWallpaperService wallpaperService)
+        public DetailViewModel(IImageService imageService, IWallpaperService wallpaperService, IPhotoSaverService photoSaverService)
         {
             _imageService = imageService;
             _wallpaperService = wallpaperService;
+            _photoSaverService = photoSaverService;
         }
 
-        // Genel bir duvar kağıdı ayarlama metodu
         private async Task SetWallpaper(WallpaperTarget target)
         {
             if (SelectedWallpaper == null) return;
 
-            // Büyük görseli indir
             var imageBytes = await _imageService.GetImageBytesAsync(SelectedWallpaper.FullImageUrl);
             if (imageBytes != null)
             {
@@ -44,21 +43,34 @@ namespace WertinatWallify.ViewModels
         }
 
         [RelayCommand]
-        private async Task SetAsHomeScreen()
-        {
-            await SetWallpaper(WallpaperTarget.HomeScreen);
-        }
+        private async Task SetAsHomeScreen() => await SetWallpaper(WallpaperTarget.HomeScreen);
 
         [RelayCommand]
-        private async Task SetAsLockScreen()
-        {
-            await SetWallpaper(WallpaperTarget.LockScreen);
-        }
+        private async Task SetAsLockScreen() => await SetWallpaper(WallpaperTarget.LockScreen);
 
         [RelayCommand]
-        private async Task SetAsBoth()
+        private async Task SetAsBoth() => await SetWallpaper(WallpaperTarget.Both);
+
+        [RelayCommand]
+        private async Task DownloadImage()
         {
-            await SetWallpaper(WallpaperTarget.Both);
+            if (SelectedWallpaper == null) return;
+
+            var imageBytes = await _imageService.GetImageBytesAsync(SelectedWallpaper.FullImageUrl);
+            if (imageBytes != null)
+            {
+                string fileName = $"{SelectedWallpaper.Name.Replace(" ", "_")}_{DateTime.Now:yyyyMMddHHmmss}.jpg";
+                bool result = await _photoSaverService.SavePhotoAsync(imageBytes, fileName);
+
+                if (result)
+                {
+                    await App.Current.MainPage.DisplayAlert("Başarılı", "Görsel galerinize kaydedildi!", "Tamam");
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Hata", "Görsel kaydedilemedi.", "Tamam");
+                }
+            }
         }
 
         [RelayCommand]
@@ -66,7 +78,6 @@ namespace WertinatWallify.ViewModels
         {
             if (SelectedWallpaper == null) return;
             await Microsoft.Maui.ApplicationModel.DataTransfer.Share.Default.RequestAsync(new ShareTextRequest
-
             {
                 Uri = SelectedWallpaper.FullImageUrl,
                 Title = "Bu harika duvar kağıdına bak!"

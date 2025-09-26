@@ -6,9 +6,16 @@
     xmlns:views="clr-namespace:WertinatWallify.Views"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Galeri"
-        ContentTemplate="{DataTemplate views:GalleryPage}"
-        Route="GalleryPage" />
+    <TabBar>
+        <ShellContent
+            Title="Galeri"
+            ContentTemplate="{DataTemplate views:GalleryPage}"
+            Route="GalleryPage" />
+
+        <ShellContent
+            Title="Favoriler"
+            ContentTemplate="{DataTemplate views:FavoritesPage}"
+            Route="FavoritesPage" />
+    </TabBar>
 
 </Shell>

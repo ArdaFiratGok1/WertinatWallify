@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:WertinatWallify.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:DataType="viewmodels:GalleryViewModel"
-             x:Class="WertinatWallify.Views.GalleryPage"
-             Title="Galeri"
+             x:DataType="viewmodels:FavoritesViewModel"
+             x:Class="WertinatWallify.Views.FavoritesPage"
+             Title="Favoriler"
              Shell.NavBarIsVisible="False">
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -17,35 +17,20 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Appearing"
-            Command="{Binding LoadWallpapersCommand}" />
+            Command="{Binding LoadFavoritesCommand}" />
     </ContentPage.Behaviors>
 
-    <Grid RowDefinitions="Auto, Auto, *">
+    <Grid RowDefinitions="Auto, *">
         <Label Grid.Row="0"
-               Text="Slmmm"
+               Text="Favorilerim"
                TextColor="White"
                FontSize="32"
                FontAttributes="Bold"
                HorizontalOptions="Center"
-               Margin="0,40,0,10"/>
+               Margin="0,40,0,20"/>
 
-        <Border Grid.Row="1"
-                StrokeShape="RoundRectangle 25"
-                StrokeThickness="0"
-                BackgroundColor="#50FFFFFF"
-                HeightRequest="50"
-                Padding="0"
-                Margin="20,0,20,20">
-            <SearchBar Placeholder="Duvar kağıdı ara..."
-                       Text="{Binding SearchText}"
-                       PlaceholderColor="#DDDDDD"
-                       TextColor="White"
-                       CancelButtonColor="White"
-                       BackgroundColor="Transparent"/>
-        </Border>
-
-        <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding Wallpapers}"
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding FavoriteWallpapers}"
                         SelectionMode="None">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
@@ -71,11 +56,6 @@
                                     </LinearGradientBrush>
                                 </Grid.Background>
 
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GalleryViewModel}}, Path=GoToDetailsCommand}"
-                                                  CommandParameter="{Binding .}"/>
-                                </Grid.GestureRecognizers>
-
                                 <Grid VerticalOptions="End" Padding="10" ColumnDefinitions="*, Auto">
                                     <Label Grid.Column="0"
                                            Text="{Binding Wallpaper.Name}"
@@ -87,7 +67,7 @@
                                                  HeightRequest="24"
                                                  WidthRequest="24"
                                                  BackgroundColor="Transparent"
-                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GalleryViewModel}}, Path=ToggleFavoriteCommand}"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:FavoritesViewModel}}, Path=ToggleFavoriteCommand}"
                                                  CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Grid>
@@ -96,5 +76,12 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <StackLayout Grid.Row="1"
+                     IsVisible="{Binding HasNoFavorites}"
+                     VerticalOptions="Center" Spacing="10">
+            <Label Text="💔" FontSize="50" HorizontalOptions="Center"/>
+            <Label Text="Henüz favoriniz yok." TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+        </StackLayout>
     </Grid>
 </ContentPage>
